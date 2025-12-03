@@ -122,8 +122,32 @@ function createDemoData() {
                 createdAt: "2024-01-25",
                 salesCount: 6
             },
-            {
+              {
                 id: 6,
+                title: "The Geico Handbook",
+                author: "Ashburn Giddick",
+                isbn: "9780061120090",
+                price: 25.99,
+                quantity: 10,
+                category: "Fiction",
+                supplierId: 1,
+                createdAt: "2024-01-25",
+                salesCount: 6
+            },  
+            {
+                id: 7,
+                title: "Parenting Troubles",
+                author: "Roy Harper",
+                isbn: "9780061190084",
+                price: 34.99,
+                quantity: 20,
+                category: "Fiction",
+                supplierId: 1,
+                createdAt: "2024-01-25",
+                salesCount: 6
+            },
+            {
+                id: 8,
                 title: "Sapiens: A Brief History of Humankind",
                 author: "Yuval Noah Harari",
                 isbn: "9780062316097",
