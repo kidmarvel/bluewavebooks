@@ -1483,6 +1483,39 @@ function selectSuggestion(title) {
     document.getElementById('searchSuggestions').style.display = 'none';
 }
 
+function addVoiceCommand() {
+    if ('webkitSpeechRecognition' in window) {
+        const recognition = new webkitSpeechRecognition();
+        recognition.continuous = false;
+        recognition.interimResults = false;
+        recognition.lang = 'en-US';
+        
+        recognition.onresult = (event) => {
+            const command = event.results[0][0].transcript.toLowerCase();
+            
+            if (command.includes('add book')) {
+                showBookModal();
+            } else if (command.includes('dashboard')) {
+                showPage('dashboard');
+            } else if (command.includes('new sale')) {
+                showPage('sales');
+            }
+            
+            Toast.show(`Heard: "${command}"`, 'info');
+        };
+        
+        recognition.start();
+        Toast.show('Voice command active - say "add book" or "dashboard"', 'info');
+    } else {
+        Toast.show('Voice commands not supported in this browser', 'warning');
+    }
+}
+
+// Add voice button
+<button class="btn btn-info" onclick="addVoiceCommand()">
+    <i class="bi bi-mic"></i> Voice Command
+</button>
+
 
 // ================= INITIALIZATION =================
 
