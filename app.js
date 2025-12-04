@@ -1291,6 +1291,64 @@ function saveBook() {
     setTimeout(() => hideLoading('#bookModal .modal-footer'), 1000);
 }
 
+// Professional toast system
+class Toast {
+    static show(message, type = 'info', duration = 3000) {
+        // Create toast container if it doesn't exist
+        let container = document.getElementById('toastContainer');
+        if (!container) {
+            container = document.createElement('div');
+            container.id = 'toastContainer';
+            container.className = 'toast-container position-fixed top-0 end-0 p-3';
+            container.style.zIndex = '9999';
+            document.body.appendChild(container);
+        }
+        
+        // Create toast
+        const toastId = 'toast-' + Date.now();
+        const toastHTML = `
+            <div id="${toastId}" class="toast align-items-center border-0 bg-${type}" role="alert">
+                <div class="d-flex">
+                    <div class="toast-body text-white">
+                        <i class="bi bi-${this.getIcon(type)} me-2"></i>
+                        ${message}
+                    </div>
+                    <button type="button" class="btn-close btn-close-white me-2 m-auto" data-bs-dismiss="toast"></button>
+                </div>
+            </div>
+        `;
+        
+        container.insertAdjacentHTML('beforeend', toastHTML);
+        
+        // Show toast
+        const toastElement = document.getElementById(toastId);
+        const toast = new bootstrap.Toast(toastElement, {
+            autohide: true,
+            delay: duration
+        });
+        
+        toast.show();
+        
+        // Clean up after hide
+        toastElement.addEventListener('hidden.bs.toast', () => {
+            toastElement.remove();
+        });
+    }
+    
+    static getIcon(type) {
+        const icons = {
+            success: 'check-circle',
+            error: 'x-circle',
+            warning: 'exclamation-triangle',
+            info: 'info-circle'
+        };
+        return icons[type] || 'info-circle';
+    }
+}
+
+// Replace all alerts with:
+// Toast.show('Book added successfully!', 'success');
+// Toast.show('Error!', 'error');
 // ================= INITIALIZATION =================
 
 /**
