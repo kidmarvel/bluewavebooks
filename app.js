@@ -1269,6 +1269,28 @@ function showKeyboardShortcuts() {
     Alt + R       - Reports`);
 }
 
+// Add loading function
+function showLoading(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.classList.add('loading');
+    }
+}
+
+function hideLoading(selector) {
+    const element = document.querySelector(selector);
+    if (element) {
+        element.classList.remove('loading');
+    }
+}
+
+// Use in functions
+function saveBook() {
+    showLoading('#bookModal .modal-footer');
+    // ... rest of saveBook
+    setTimeout(() => hideLoading('#bookModal .modal-footer'), 1000);
+}
+
 // ================= INITIALIZATION =================
 
 /**
