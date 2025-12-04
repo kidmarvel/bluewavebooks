@@ -1230,6 +1230,45 @@ document.documentElement.setAttribute('data-theme', savedTheme);
     <i class="bi bi-moon"></i> Dark Mode
 </div>
 
+// Add to app.js
+document.addEventListener('keydown', (e) => {
+    // Ctrl/Cmd + S = Save
+    if ((e.ctrlKey || e.metaKey) && e.key === 's') {
+        e.preventDefault();
+        if (document.querySelector('#bookModal.show')) saveBook();
+    }
+    
+    // Escape = Close modal
+    if (e.key === 'Escape') {
+        const modals = document.querySelectorAll('.modal.show');
+        if (modals.length > 0) {
+            const modal = bootstrap.Modal.getInstance(modals[0]);
+            modal.hide();
+        }
+    }
+    
+    // F1 = Show help
+    if (e.key === 'F1') {
+        e.preventDefault();
+        showKeyboardShortcuts();
+    }
+});
+
+function showKeyboardShortcuts() {
+    alert(`Keyboard Shortcuts:
+    
+    Ctrl/Cmd + S  - Save form
+    Esc           - Close modal
+    F1            - This help
+    
+    Navigation:
+    Alt + D       - Dashboard
+    Alt + B       - Books
+    Alt + S       - Sales
+    Alt + I       - Inventory
+    Alt + R       - Reports`);
+}
+
 // ================= INITIALIZATION =================
 
 /**
