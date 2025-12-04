@@ -757,7 +757,68 @@ function processSale() {
     
     showNotification('Sale processed successfully!', 'success');
 }
+function printReceipt(sale) {
+    const printWindow = window.open('', '_blank');
+    printWindow.document.write(`
+        <!DOCTYPE html>
+        <html>
+        <head>
+            <title>Receipt #${sale.id}</title>
+            <style>
+                body { font-family: monospace; padding: 20px; max-width: 300px; }
+                .center { text-align: center; }
+                .line { border-bottom: 1px dashed #000; margin: 10px 0; }
+                .total { font-weight: bold; }
+            </style>
+        </head>
+        <body>
+            <div class="center">
+                <h3>📚 BlueWave Bookstore</h3>
+                <p>Receipt #${String(sale.id).padStart(6, '0')}</p>
+                <p>${new Date().toLocaleDateString()} ${sale.saleTime}</p>
+            </div>
+            
+            <div class="line"></div>
+            
+            <table width="100%">
+                <tr>
+                    <td>${sale.title}</td>
+                    <td align="right">${sale.quantity} x $${sale.unitPrice.toFixed(2)}</td>
+                </tr>
+                <tr>
+                    <td></td>
+                    <td align="right">$${sale.totalPrice.toFixed(2)}</td>
+                </tr>
+            </table>
+            
+            <div class="line"></div>
+            
+            <table width="100%" class="total">
+                <tr>
+                    <td>TOTAL</td>
+                    <td align="right">$${sale.totalPrice.toFixed(2)}</td>
+                </tr>
+            </table>
+            
+            <div class="line"></div>
+            
+            <p class="center">
+                Thank you!<br>
+                Sold by: ${currentUser.fullName}
+            </p>
+            
+            <script>
+                window.onload = () => window.print();
+                setTimeout(() => window.close(), 5000);
+            </script>
+        </body>
+        </html>
+    `);
+    printWindow.document.close();
+}
 
+// Call this after successful sale
+// Modify processSale() function to call: printReceipt(sale);
 /**
  * Show receipt for a sale
  * @param {object} sale - Sale object
