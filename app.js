@@ -1098,6 +1098,53 @@ function showNotification(message, type = 'info') {
     }, 5000);
 }
 
+// Add to app.js
+function exportAllData() {
+    const data = {
+        books: demoData.books,
+        sales: demoData.sales,
+        suppliers: demoData.suppliers,
+        exportDate: new Date().toISOString()
+    };
+    
+    const dataStr = JSON.stringify(data, null, 2);
+    const dataUri = 'data:application/json;charset=utf-8,'+ encodeURIComponent(dataStr);
+    
+    const link = document.createElement('a');
+    link.setAttribute('href', dataUri);
+    link.setAttribute('download', `bluewave_backup_${new Date().toISOString().split('T')[0]}.json`);
+    link.click();
+}
+
+function importData(event) {
+    const file = event.target.files[0];
+    const reader = new FileReader();
+    
+    reader.onload = function(e) {
+        try {
+            const importedData = JSON.parse(e.target.result);
+            if (confirm('Replace all current data?')) {
+                demoData = importedData;
+                saveData();
+                location.reload();
+            }
+        } catch (error) {
+            alert('Invalid file format!');
+        }
+    };
+    
+    reader.readAsText(file);
+}
+
+// Add buttons to dashboard.html
+<button class="btn btn-outline-secondary" onclick="exportAllData()">
+    <i class="bi bi-download"></i> Export Data
+</button>
+<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
+<button class="btn btn-outline-secondary" onclick="document.getElementById('importFile').click()">
+    <i class="bi bi-upload"></i> Import Data
+</button>
+
 // ================= INITIALIZATION =================
 
 /**
