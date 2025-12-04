@@ -1197,15 +1197,6 @@ function importData(event) {
     reader.readAsText(file);
 }
 
-// Add buttons to dashboard.html
-<button class="btn btn-outline-secondary" onclick="exportAllData()">
-    <i class="bi bi-download"></i> Export Data
-</button>
-<input type="file" id="importFile" accept=".json" style="display:none" onchange="importData(event)">
-<button class="btn btn-outline-secondary" onclick="document.getElementById('importFile').click()">
-    <i class="bi bi-upload"></i> Import Data
-</button>
-
 // Add to app.js
 function toggleDarkMode() {
     const currentTheme = document.documentElement.getAttribute('data-theme');
