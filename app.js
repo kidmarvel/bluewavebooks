@@ -1206,6 +1206,30 @@ function importData(event) {
     <i class="bi bi-upload"></i> Import Data
 </button>
 
+// Add to app.js
+function toggleDarkMode() {
+    const currentTheme = document.documentElement.getAttribute('data-theme');
+    const newTheme = currentTheme === 'dark' ? 'light' : 'dark';
+    
+    document.documentElement.setAttribute('data-theme', newTheme);
+    localStorage.setItem('bluewave_theme', newTheme);
+    
+    // Update icon
+    const icon = document.querySelector('.dark-mode-toggle i');
+    if (icon) {
+        icon.className = newTheme === 'dark' ? 'bi bi-sun' : 'bi bi-moon';
+    }
+}
+
+// Initialize on load
+const savedTheme = localStorage.getItem('bluewave_theme') || 'light';
+document.documentElement.setAttribute('data-theme', savedTheme);
+
+// Add button to sidebar
+<div class="nav-link text-white" onclick="toggleDarkMode()">
+    <i class="bi bi-moon"></i> Dark Mode
+</div>
+
 // ================= INITIALIZATION =================
 
 /**
