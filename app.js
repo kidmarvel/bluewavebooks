@@ -1349,6 +1349,141 @@ class Toast {
 // Replace all alerts with:
 // Toast.show('Book added successfully!', 'success');
 // Toast.show('Error!', 'error');
+
+function exportSalesCSV() {
+    let csv = 'Date,Book,Quantity,Unit Price,Total Price,Sold By\n';
+    
+    demoData.sales.forEach(sale => {
+        csv += `${sale.saleDate},"${sale.title}",${sale.quantity},${sale.unitPrice},${sale.totalPrice},${sale.soldBy}\n`;
+    });
+    
+    const blob = new Blob([csv], { type: 'text/csv' });
+    const url = window.URL.createObjectURL(blob);
+    const a = document.createElement('a');
+    a.href = url;
+    a.download = `sales_report_${getTodayDate()}.csv`;
+    document.body.appendChild(a);
+    a.click();
+    document.body.removeChild(a);
+    
+    Toast.show('CSV exported successfully!', 'success');
+}
+
+// Add button to reports page
+<button class="btn btn-success" onclick="exportSalesCSV()">
+    <i class="bi bi-file-earmark-excel"></i> Export CSV
+</button>
+
+// Enhanced validation functions
+function validateBookData(book) {
+    const errors = [];
+    
+    if (!book.title || book.title.trim().length < 2) {
+        errors.push('Title must be at least 2 characters');
+    }
+    
+    if (!book.author || book.author.trim().length < 2) {
+        errors.push('Author name is required');
+    }
+    
+    if (isNaN(book.price) || book.price <= 0) {
+        errors.push('Price must be a positive number');
+    }
+    
+    if (isNaN(book.quantity) || book.quantity < 0) {
+        errors.push('Quantity cannot be negative');
+    }
+    
+    // ISBN validation (optional)
+    if (book.isbn && !isValidISBN(book.isbn)) {
+        errors.push('Invalid ISBN format');
+    }
+    
+    return errors;
+}
+
+function isValidISBN(isbn) {
+    // Simple ISBN validation
+    const cleanISBN = isbn.replace(/[-\s]/g, '');
+    return cleanISBN.length === 10 || cleanISBN.length === 13;
+}
+
+// Enhanced saveBook function
+function saveBook() {
+    const book = {
+        title: document.getElementById('bookTitle').value.trim(),
+        author: document.getElementById('bookAuthor').value.trim(),
+        price: parseFloat(document.getElementById('bookPrice').value),
+        quantity: parseInt(document.getElementById('bookQuantity').value),
+        category: document.getElementById('bookCategory').value
+    };
+    
+    const errors = validateBookData(book);
+    if (errors.length > 0) {
+        Toast.show(errors.join(', '), 'error');
+        return;
+    }
+    
+    // ... rest of saveBook
+}
+
+// Enhance search with suggestions
+function initSearchSuggestions() {
+    const searchInput = document.getElementById('bookSearch');
+    if (!searchInput) return;
+    
+    const suggestionsBox = document.createElement('div');
+    suggestionsBox.id = 'searchSuggestions';
+    suggestionsBox.className = 'dropdown-menu show position-absolute';
+    suggestionsBox.style.display = 'none';
+    
+    searchInput.parentNode.appendChild(suggestionsBox);
+    
+    searchInput.addEventListener('input', (e) => {
+        const query = e.target.value.toLowerCase();
+        if (query.length < 2) {
+            suggestionsBox.style.display = 'none';
+            return;
+        }
+        
+        const suggestions = demoData.books
+            .filter(book => 
+                book.title.toLowerCase().includes(query) ||
+                book.author.toLowerCase().includes(query) ||
+                book.isbn?.includes(query)
+            )
+            .slice(0, 5);
+        
+        if (suggestions.length > 0) {
+            suggestionsBox.innerHTML = suggestions.map(book => `
+                <a class="dropdown-item" href="#" onclick="selectSuggestion('${book.title}')">
+                    <strong>${book.title}</strong><br>
+                    <small class="text-muted">${book.author} - $${book.price.toFixed(2)}</small>
+                </a>
+            `).join('');
+            
+            suggestionsBox.style.display = 'block';
+            suggestionsBox.style.width = searchInput.offsetWidth + 'px';
+        } else {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+    
+    // Hide suggestions on click outside
+    document.addEventListener('click', (e) => {
+        if (!searchInput.contains(e.target) && !suggestionsBox.contains(e.target)) {
+            suggestionsBox.style.display = 'none';
+        }
+    });
+}
+
+function selectSuggestion(title) {
+    document.getElementById('bookSearch').value = title;
+    filterBooks();
+    document.getElementById('searchSuggestions').style.display = 'none';
+}
+
+
 // ================= INITIALIZATION =================
 
 /**
