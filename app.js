@@ -1219,11 +1219,6 @@ function toggleDarkMode() {
 const savedTheme = localStorage.getItem('bluewave_theme') || 'light';
 document.documentElement.setAttribute('data-theme', savedTheme);
 
-// Add button to sidebar
-<div class="nav-link text-white" onclick="toggleDarkMode()">
-    <i class="bi bi-moon"></i> Dark Mode
-</div>
-
 // Add to app.js
 document.addEventListener('keydown', (e) => {
     // Ctrl/Cmd + S = Save
@@ -1363,10 +1358,6 @@ function exportSalesCSV() {
     Toast.show('CSV exported successfully!', 'success');
 }
 
-// Add button to reports page
-<button class="btn btn-success" onclick="exportSalesCSV()">
-    <i class="bi bi-file-earmark-excel"></i> Export CSV
-</button>
 
 // Enhanced validation functions
 function validateBookData(book) {
@@ -1505,10 +1496,7 @@ function addVoiceCommand() {
     }
 }
 
-// Add voice button
-<button class="btn btn-info" onclick="addVoiceCommand()">
-    <i class="bi bi-mic"></i> Voice Command
-</button>
+
 
 
 // ================= INITIALIZATION =================
