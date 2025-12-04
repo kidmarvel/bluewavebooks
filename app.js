@@ -6,6 +6,9 @@
  * using localStorage for data persistence.
  */
 
+console.log("✅ app.js loaded successfully!");
+
+
 // ================= GLOBAL VARIABLES =================
 let demoData = {
     books: [],
